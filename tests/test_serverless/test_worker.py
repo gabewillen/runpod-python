@@ -13,6 +13,10 @@ import nest_asyncio
 import runpod
 from runpod.serverless.modules.rp_logger import RunPodLogger
 from runpod.serverless import _signal_handler
+from runpod.serverless.modules.rp_types import (
+    RunpodServerlessWorkerJob,
+    RunpodServerlessWorkerStartConfig,
+)
 
 nest_asyncio.apply()
 
@@ -138,7 +142,7 @@ class TestWorkerTestInput(IsolatedAsyncioTestCase):
             assert log.level == "WARN"
 
 
-def generator_handler(job):
+def generator_handler(job: RunpodServerlessWorkerJob):
     """
     Test generator_handler
     """
@@ -147,7 +151,7 @@ def generator_handler(job):
     yield "test2"
 
 
-def generator_handler_exception(job):
+def generator_handler_exception(job: RunpodServerlessWorkerJob):
     """
     Test generator_handler
     """
@@ -181,7 +185,7 @@ class TestRunWorker(IsolatedAsyncioTestCase):
         os.environ["RUNPOD_WEBHOOK_GET_JOB"] = "https://test.com"
 
         # Set up the config
-        self.config = {
+        self.config: RunpodServerlessWorkerStartConfig = {
             "handler": MagicMock(),
             "refresh_worker": True,
             "rp_args": {"rp_debugger": True, "rp_log_level": "DEBUG"},
@@ -479,7 +483,7 @@ class TestRunWorker(IsolatedAsyncioTestCase):
         }
 
         # Let the test be a long running one so we can capture the scale-up and scale-down.
-        config = {
+        config: RunpodServerlessWorkerStartConfig = {
             "handler": MagicMock(),
             "refresh_worker": False,
             "rp_args": {"rp_debugger": True, "rp_log_level": "DEBUG"},

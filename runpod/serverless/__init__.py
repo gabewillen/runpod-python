@@ -11,9 +11,11 @@ import signal
 import sys
 import time
 import typing
-from typing import Any, Dict
+from typing import Any, Dict, TypedDict
+
 
 from runpod.serverless import core
+from runpod.serverless.modules.rp_types import RunpodServerlessWorkerStartConfig
 
 from ..version import __version__ as runpod_version
 from . import worker
@@ -77,7 +79,9 @@ parser.add_argument(
 )
 
 
-def _set_config_args(config) -> dict:
+def _set_config_args(
+    config: RunpodServerlessWorkerStartConfig,
+) -> RunpodServerlessWorkerStartConfig:
     """
     Sets the config rp_args, removing any recognized arguments from sys.argv.
     Returns: config
@@ -129,7 +133,7 @@ def _signal_handler(sig, frame):
 # ---------------------------------------------------------------------------- #
 #                            Start Serverless Worker                           #
 # ---------------------------------------------------------------------------- #
-def start(config: Dict[str, Any]):
+def start(config: RunpodServerlessWorkerStartConfig):
     """
     Starts the serverless worker.
 
@@ -173,14 +177,17 @@ def start(config: Dict[str, Any]):
 
     # --------------------------------- SLS-Core --------------------------------- #
 
-    if os.getenv("RUNPOD_SLS_CORE") is None and os.getenv("RUNPOD_USE_CORE") is not None:
-            log.warn("RUNPOD_USE_CORE is deprecated. Please use RUNPOD_SLS_CORE instead.")
-            core.main(config)
-            return
+    if (
+        os.getenv("RUNPOD_SLS_CORE") is None
+        and os.getenv("RUNPOD_USE_CORE") is not None
+    ):
+        log.warn("RUNPOD_USE_CORE is deprecated. Please use RUNPOD_SLS_CORE instead.")
+        core.main(config)
+        return
 
-    elif os.getenv("RUNPOD_SLS_CORE","false").lower() in ["1", "t", "true"]:
-            core.main(config)
-            return
+    elif os.getenv("RUNPOD_SLS_CORE", "false").lower() in ["1", "t", "true"]:
+        core.main(config)
+        return
 
     # --------------------------------- Standard --------------------------------- #
     worker.main(config)
