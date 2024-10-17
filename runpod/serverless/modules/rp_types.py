@@ -32,6 +32,8 @@ __all__ = [
 ]
 
 R = typing.TypeVar("ReturnType")
+I = typing.TypeVar("InputType")
+O = typing.TypeVar("OutputType")
 
 
 # job type add any job related info here alternatively you can extend this type for custom job types. This is purely for type hinting and to improve developer experience.
@@ -53,6 +55,16 @@ RunpodServerlessWorkerAsyncHandler = Annotated[
 RunpodServerlessWorkerGeneratorHandler = Annotated[
     typing.Callable[P, typing.Generator[typing.Iterable, None, None]],
     "Generator handler function that yields Iterables",
+]
+
+
+RunpodServerlessWorkerHandler = Annotated[
+    typing.Union[
+        RunpodServerlessWorkerSyncHandler,
+        RunpodServerlessWorkerAsyncHandler,
+        RunpodServerlessWorkerGeneratorHandler,
+    ],
+    "Any handler function that processes jobs",
 ]
 
 
