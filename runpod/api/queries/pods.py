@@ -2,6 +2,9 @@
 RunPod | API Wrapper | Queries | GPUs
 """
 
+from ..rp_graphql_types import Pod
+
+
 QUERY_POD = """
 query myPods {
     myself {
@@ -44,7 +47,7 @@ query myPods {
 """
 
 
-def generate_pod_query(pod_id):
+def generate_pod_query(pod_id) -> Pod:
     """
     Generate a query for a specific GPU type
     """

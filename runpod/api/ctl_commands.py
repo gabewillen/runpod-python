@@ -5,6 +5,9 @@ RunPod | API Wrapper | CTL Commands
 # pylint: disable=too-many-arguments,too-many-locals
 
 from typing import Optional
+import typing
+
+from .rp_graphql_types import GpuType, Pod, User
 
 from .graphql import run_graphql_query
 from .mutations import container_register_auth as container_register_auth_mutations
@@ -18,7 +21,7 @@ from .queries import pods as pod_queries
 from .queries import user as user_queries
 
 
-def get_user() -> dict:
+def get_user() -> User:
     """
     Get the current user
     """
@@ -38,7 +41,7 @@ def update_user_settings(pubkey: str) -> dict:
     return cleaned_return
 
 
-def get_gpus() -> dict:
+def get_gpus() -> typing.List[GpuType]:
     """
     Get all GPU types
     """
@@ -67,7 +70,7 @@ def get_gpu(gpu_id: str, gpu_quantity: int = 1):
     return cleaned_return[0]
 
 
-def get_pods() -> dict:
+def get_pods() -> typing.List[Pod]:
     """
     Get all pods
     """
@@ -76,7 +79,7 @@ def get_pods() -> dict:
     return cleaned_return
 
 
-def get_pod(pod_id: str):
+def get_pod(pod_id: str) -> Pod:
     """
     Get a specific pod
 
@@ -107,7 +110,7 @@ def create_pod(
     template_id: Optional[str] = None,
     network_volume_id: Optional[str] = None,
     allowed_cuda_versions: Optional[list] = None,
-) -> dict:
+) -> Pod:
     """
     Create a pod
 
@@ -174,7 +177,7 @@ def create_pod(
     return cleaned_response
 
 
-def stop_pod(pod_id: str):
+def stop_pod(pod_id: str) -> Pod:
     """
     Stop a pod
 
@@ -191,7 +194,7 @@ def stop_pod(pod_id: str):
     return cleaned_response
 
 
-def resume_pod(pod_id: str, gpu_count: int):
+def resume_pod(pod_id: str, gpu_count: int) -> Pod:
     """
     Resume a pod
 
@@ -212,7 +215,7 @@ def resume_pod(pod_id: str, gpu_count: int):
     return cleaned_response
 
 
-def terminate_pod(pod_id: str):
+def terminate_pod(pod_id: str) -> Pod:
     """
     Terminate a pod
 

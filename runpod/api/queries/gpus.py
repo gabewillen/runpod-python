@@ -2,6 +2,10 @@
 RunPod | API | Queries | GPUs
 """
 
+import typing
+from ..rp_graphql_types import GpuType
+
+
 QUERY_GPU_TYPES = """
 query GpuTypes {
   gpuTypes {
@@ -13,7 +17,7 @@ query GpuTypes {
 """
 
 
-def generate_gpu_query(gpu_id, gpu_count=1):
+def generate_gpu_query(gpu_id, gpu_count=1) -> typing.List[GpuType]:
     """
     Generate a query for a specific GPU type
     """
